@@ -1,5 +1,6 @@
 ﻿// Constants
-const DEFAULT_API = "https://rag-document-qa-bot-production.up.railway.app";
+const DEFAULT_API = "http://localhost:8000";
+const OLD_RAILWAY  = "https://rag-document-qa-bot-production.up.railway.app";
 
 // State
 let conversationHistory = [];
@@ -22,6 +23,10 @@ const fileBannerClear = document.getElementById("file-banner-clear");
 
 // Init - no token needed, go straight to chat
 chrome.storage.local.get(["ff_api_url", "ff_prefill"], (data) => {
+  // Auto-migrate: clear old Railway URL so DEFAULT_API (localhost) is used
+  if (data.ff_api_url === OLD_RAILWAY) {
+    chrome.storage.local.remove("ff_api_url");
+  }
   showChat();
   detectOpenFile();
 
