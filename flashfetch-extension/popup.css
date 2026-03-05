@@ -226,6 +226,44 @@ input::placeholder {
   color: rgba(255,255,255,0.45);
 }
 
+/* File banner */
+.file-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  margin: 0 0 4px;
+}
+.file-banner-name {
+  flex: 1;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+.file-banner-mode {
+  color: rgba(255,255,255,0.35);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.file-banner-clear {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.file-banner-clear:hover { color: rgba(255,255,255,0.7); }
+
 /* Typing indicator */
 .typing-bubble {
   display: flex;

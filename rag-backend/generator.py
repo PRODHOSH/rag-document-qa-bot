@@ -147,3 +147,74 @@ def generate(query: str, retrieved: list[dict], history: list[dict] | None = Non
         "sources":    sources,
         "confidence": get_confidence(top_score),
     }
+
+
+def generate_with_context(
+    query: str,
+    context_text: str,
+    history: list[dict] | None = None,
+    filename: str = "inline document",
+) -> dict:
+    """
+    Answer a question using raw text passed inline (no FAISS lookup).
+    Used by the Chrome extension when the user has a file open in the browser.
+    """
+    if not context_text or not context_text.strip():
+        return {
+            "answer":     NO_ANSWER,
+            "sources":    [],
+            "confidence": "low",
+        }
+
+    # Trim to ~12 000 chars to stay within token limits
+    trimmed = context_text.strip()[:12000]
+
+    # Build conversation history prefix
+    history_prefix = ""
+    if history:
+        recent = [t for t in history if t.get("role") in ("user", "assistant")][-6:]
+        if recent:
+            lines = []
+            for turn in recent:
+                prefix = "User" if turn["role"] == "user" else "Assistant"
+                lines.append(f"{prefix}: {turn['content'].strip()}")
+            history_prefix = "Previous conversation:\n" + "\n".join(lines) + "\n\n"
+
+    system_prompt = (
+        "You are a strict document Q&A assistant. "
+        "Rules you MUST follow:\n"
+        "1. Answer ONLY using the provided document context — no outside knowledge.\n"
+        "2. Be direct and concise. Avoid padding or filler phrases.\n"
+        "3. You may use the previous conversation for context, but base answers on the document.\n"
+        "4. If the exact answer is not in the context, respond EXACTLY with: "
+        f'"{NO_ANSWER}"\n'
+        "5. Never guess, infer beyond what is written, or fabricate details."
+    )
+
+    user_prompt = (
+        f"{history_prefix}"
+        f"Document ({filename}):\n{trimmed}\n\n"
+        f"Question: {query}\n\n"
+        "Answer (strictly from the document — no outside knowledge):"
+    )
+
+    client = _get_client()
+    response = client.chat.completions.create(
+        model=GROQ_MODEL,
+        temperature=TEMPERATURE,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user",   "content": user_prompt},
+        ],
+    )
+
+    answer = response.choices[0].message.content.strip()
+
+    if NO_ANSWER.split(".")[0].lower() in answer.lower():
+        return {"answer": NO_ANSWER, "sources": [], "confidence": "low"}
+
+    return {
+        "answer":     answer,
+        "sources":    [{"document": filename, "snippet": trimmed[:200], "score": 1.0}],
+        "confidence": "high",
+    }

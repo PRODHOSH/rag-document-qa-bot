@@ -19,7 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from retriever import retrieve, _index, _load, reset as reset_retriever
-from generator import generate
+from generator import generate, generate_with_context
 from ingest import ingest as run_ingest, DOCS_DIR
 
 SUPPORTED = (".txt", ".md", ".pdf")
@@ -48,6 +48,12 @@ class Query(BaseModel):
     question: str               = Field(..., min_length=3, description="The question to answer")
     history:  list[HistoryTurn] = Field(default_factory=list, description="Previous conversation turns for multi-turn memory")
 
+class InlineQuery(BaseModel):
+    question:     str               = Field(..., min_length=3)
+    context_text: str               = Field(..., description="Raw text from the open file / page")
+    filename:     str               = Field(default="inline document")
+    history:      list[HistoryTurn] = Field(default_factory=list)
+
 class Source(BaseModel):
     document:  str
     snippet:   str
@@ -73,6 +79,25 @@ def ask(query: Query):
         return result
     except FileNotFoundError as e:
         raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal error: {e}")
+
+
+@app.post("/ask-with-context", response_model=AnswerResponse)
+def ask_with_context(query: InlineQuery):
+    """
+    Answer a question using raw text passed inline (no document upload needed).
+    The Chrome extension uses this when a file is open in the browser.
+    """
+    try:
+        history = [t.model_dump() for t in query.history]
+        result  = generate_with_context(
+            query.question,
+            query.context_text,
+            history,
+            query.filename,
+        )
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal error: {e}")
 

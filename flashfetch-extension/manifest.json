@@ -30,10 +30,12 @@
     "activeTab",
     "storage",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "notifications"
   ],
   "host_permissions": [
     "https://rag-document-qa-bot-production.up.railway.app/*",
-    "http://localhost:8000/*"
+    "http://localhost:8000/*",
+    "file:///*"
   ]
 }
