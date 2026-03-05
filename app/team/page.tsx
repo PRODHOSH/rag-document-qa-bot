@@ -50,20 +50,20 @@ const team = [
 
 export default function TeamPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black text-white">
 
       {/* Header */}
       <section className="w-full pt-16 pb-10 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <span className="inline-block border border-border rounded-full px-3 py-1 text-xs text-muted-foreground tracking-widest uppercase mb-5">
+          <span className="inline-block border border-white/10 rounded-full px-3 py-1 text-xs text-white/35 tracking-widest uppercase mb-5">
             Synthetix 4.0 &middot; Programming Track
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-wide mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-wide mb-4 text-white" style={{ letterSpacing: '-0.03em' }}>
             Our Core
           </h1>
-          <p className="text-muted-foreground text-base max-w-2xl mx-auto">
+          <p className="text-white/45 text-sm max-w-2xl mx-auto">
             Meet the four people behind{" "}
-            <span className="text-foreground font-semibold">top-devs</span> &mdash; the
+            <span className="text-white font-semibold">FlashFetch</span> &mdash; the
             team that poured everything into 24 hours of building.
           </p>
         </div>
@@ -78,8 +78,8 @@ export default function TeamPage() {
               <div
                 key={member.name}
                 className={cn(
-                  "group flex flex-col md:flex-row w-full border border-border rounded-2xl overflow-hidden bg-card",
-                  "transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-foreground/20"
+                  "group flex flex-col md:flex-row w-full border border-white/8 rounded-2xl overflow-hidden bg-[#0a0a0a]",
+                  "transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-white/18"
                 )}
                 style={{ minHeight: 240 }}
               >
@@ -98,22 +98,22 @@ export default function TeamPage() {
                 {/* Content */}
                 <div className="flex flex-col justify-center px-8 py-8 flex-1">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1.5 border border-border rounded-full px-3 py-1 text-xs text-muted-foreground uppercase tracking-widest">
+                    <span className="inline-flex items-center gap-1.5 border border-white/10 rounded-full px-3 py-1 text-xs text-white/35 uppercase tracking-widest">
                       <Icon className="w-3.5 h-3.5" />
                       {member.role}
                     </span>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-wide mb-3">
+                  <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-wide mb-3 text-white" style={{ letterSpacing: '-0.03em' }}>
                     {member.name}
                   </h2>
-                  <p className="text-muted-foreground text-sm leading-relaxed max-w-xl">
+                  <p className="text-white/45 text-sm leading-relaxed max-w-xl">
                     {member.description}
                   </p>
                   <div className="flex gap-3 mt-5">
                     {"instagram" in member ? (
                       <a
                         href={(member as any).instagram}
-                        className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                        className="text-white/30 hover:text-white transition-colors duration-200"
                         aria-label="Instagram"
                       >
                         <Instagram className="w-5 h-5" />
@@ -122,14 +122,14 @@ export default function TeamPage() {
                       <>
                         <a
                           href={(member as any).github}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                          className="text-white/30 hover:text-white transition-colors duration-200"
                           aria-label="GitHub"
                         >
                           <Github className="w-5 h-5" />
                         </a>
                         <a
                           href={(member as any).linkedin}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                          className="text-white/30 hover:text-white transition-colors duration-200"
                           aria-label="LinkedIn"
                         >
                           <Linkedin className="w-5 h-5" />
@@ -161,7 +161,7 @@ export default function TeamPage() {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-5">
 
           {/* Poster */}
-          <div className="group lg:w-80 shrink-0 border border-border rounded-2xl overflow-hidden bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-foreground/20">
+          <div className="group lg:w-80 shrink-0 border border-white/8 rounded-2xl overflow-hidden bg-[#0a0a0a] transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-white/18">
             <div className="relative w-full h-full min-h-90">
               <Image
                 src="/synthetix-poster.png"
@@ -173,21 +173,21 @@ export default function TeamPage() {
           </div>
 
           {/* Shoutout */}
-          <div className="group flex-1 border border-border rounded-2xl bg-card px-8 py-10 md:px-12 md:py-14 flex flex-col justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-foreground/20">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          <div className="group flex-1 border border-white/8 rounded-2xl bg-[#0a0a0a] px-8 py-10 md:px-12 md:py-14 flex flex-col justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-white/18">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4">
               Shoutout
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide mb-6 text-white" style={{ letterSpacing: '-0.03em' }}>
               HumanoidX Club
             </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
+            <p className="text-white/45 leading-relaxed mb-4 text-sm">
               A massive shoutout to{" "}
-              <span className="text-foreground font-semibold">HumanoidX Club</span>{" "}
+              <span className="text-white font-semibold">HumanoidX Club</span>{" "}
               at VIT Chennai for organising the 4th edition of their flagship
               hackathon &mdash;{" "}
-              <span className="text-foreground font-semibold">Synthetix 4.0</span>.
+              <span className="text-white font-semibold">Synthetix 4.0</span>.
             </p>
-            <p className="text-muted-foreground leading-relaxed mb-8">
+            <p className="text-white/45 leading-relaxed mb-8 text-sm">
               24 hours. 3 domains. Real problems. Real solutions. The kind of
               environment that brings out the best in builders &mdash; and we are
               grateful for the opportunity to compete, create, and push our limits
@@ -197,7 +197,7 @@ export default function TeamPage() {
               {["24 Hours", "3 Domains", "Rs.15K+ Prize Pool", "VIT Chennai", "MG Auditorium", "5-6 Mar"].map((tag) => (
                 <span
                   key={tag}
-                  className="border border-border rounded-full px-3 py-1 text-xs text-muted-foreground uppercase tracking-wide"
+                  className="border border-white/10 rounded-full px-3 py-1 text-xs text-white/35 uppercase tracking-wide"
                 >
                   {tag}
                 </span>

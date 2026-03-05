@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -47,7 +47,7 @@ function InputField({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-foreground">
+      <label htmlFor={id} className="text-xs font-semibold uppercase tracking-widest text-white/40">
         {label}
       </label>
       <div className="relative">
@@ -59,9 +59,9 @@ function InputField({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           className={cn(
-            "w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground",
-            "placeholder:text-muted-foreground",
-            "focus:outline-none focus:ring-2 focus:ring-ring",
+            "w-full rounded-lg border border-white/10 bg-[#111] px-3 py-2.5 text-sm text-white",
+            "placeholder:text-white/25",
+            "focus:outline-none focus:ring-1 focus:ring-white/30",
             isPassword && "pr-10"
           )}
         />
@@ -69,7 +69,7 @@ function InputField({
           <button
             type="button"
             onClick={() => setShow((s) => !s)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
             tabIndex={-1}
           >
             {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -83,26 +83,26 @@ function InputField({
 function Divider() {
   return (
     <div className="flex items-center gap-3">
-      <span className="h-px flex-1 bg-border" />
-      <span className="text-xs text-muted-foreground">or continue with</span>
-      <span className="h-px flex-1 bg-border" />
+      <span className="h-px flex-1 bg-white/8" />
+      <span className="text-xs text-white/30">or continue with</span>
+      <span className="h-px flex-1 bg-white/8" />
     </div>
   );
 }
 
 const btnBase = cn(
-  "flex w-full items-center justify-center gap-3 rounded-lg border border-border bg-background px-4 py-2.5",
-  "text-sm font-medium text-foreground transition-colors",
-  "hover:bg-accent hover:text-accent-foreground",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  "flex w-full items-center justify-center gap-3 rounded-lg border border-white/10 bg-white/3 px-4 py-2.5",
+  "text-sm font-medium text-white/70 transition-colors",
+  "hover:bg-white/8 hover:text-white",
+  "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30",
   "disabled:pointer-events-none disabled:opacity-50"
 );
 
 const primaryBtn = cn(
-  "flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5",
-  "text-sm font-medium text-primary-foreground transition-colors",
-  "hover:bg-primary/90",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  "flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5",
+  "text-sm font-medium text-black transition-all hover:scale-[1.02] active:scale-95",
+  "",
+  "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30",
   "disabled:pointer-events-none disabled:opacity-60"
 );
 
@@ -206,12 +206,12 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) resetState(); }}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
 
         <Dialog.Content
           className={cn(
             "fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2",
-            "rounded-2xl border border-border bg-background p-8 shadow-2xl",
+            "rounded-2xl border border-white/10 bg-[#0a0a0a] p-8 shadow-2xl",
             "data-[state=open]:animate-in data-[state=closed]:animate-out",
             "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
             "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
@@ -220,7 +220,7 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
           )}
         >
           {/* Close */}
-          <Dialog.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+          <Dialog.Close className="absolute right-4 top-4 rounded-sm text-white/30 transition-colors hover:text-white focus:outline-none">
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </Dialog.Close>
@@ -229,7 +229,7 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
           {view === "forgot" && (
             <button
               onClick={() => switchView("login")}
-              className="absolute left-4 top-4 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+              className="absolute left-4 top-4 flex items-center gap-1 text-xs text-white/30 hover:text-white"
             >
               <ArrowLeft className="h-3.5 w-3.5" /> Back
             </button>
@@ -237,26 +237,26 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
 
           {/* Header */}
           <div className="mb-6 text-center">
-            <Dialog.Title className="text-2xl font-semibold tracking-tight text-foreground">
+            <Dialog.Title className="text-2xl font-semibold tracking-tight text-white" style={{ letterSpacing: "-0.04em" }}>
               {titles[view].title}
             </Dialog.Title>
-            <Dialog.Description className="mt-1.5 text-sm text-muted-foreground">
+            <Dialog.Description className="mt-1.5 text-sm text-white/40">
               {titles[view].desc}
             </Dialog.Description>
           </div>
 
-          {/* Tab switcher — login / signup */}
+          {/* Tab switcher â€” login / signup */}
           {view !== "forgot" && (
-            <div className="mb-6 flex rounded-lg border border-border p-1">
+            <div className="mb-6 flex rounded-lg border border-white/10 bg-white/3 p-1">
               {(["login", "signup"] as const).map((v) => (
                 <button
                   key={v}
                   onClick={() => switchView(v)}
                   className={cn(
-                    "flex-1 rounded-md py-1.5 text-sm font-medium transition-colors",
+                    "flex-1 rounded-md py-1.5 text-sm font-medium transition-all",
                     view === v
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-white text-black"
+                      : "text-white/40 hover:text-white"
                   )}
                 >
                   {v === "login" ? "Sign In" : "Sign Up"}
@@ -277,14 +277,14 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
             </p>
           )}
 
-          {/* ── LOGIN ── */}
+          {/* â”€â”€ LOGIN â”€â”€ */}
           {view === "login" && (
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
               <InputField label="Email" id="login-email" type="email" placeholder="you@example.com" value={loginEmail} onChange={setLoginEmail} required />
-              <InputField label="Password" id="login-password" type="password" placeholder="••••••••" value={loginPassword} onChange={setLoginPassword} required />
+              <InputField label="Password" id="login-password" type="password" placeholder="Enter your password" value={loginPassword} onChange={setLoginPassword} required />
 
               <div className="flex justify-end">
-                <button type="button" onClick={() => switchView("forgot")} className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+                <button type="button" onClick={() => switchView("forgot")} className="text-xs text-white/30 underline-offset-4 hover:text-white hover:underline">
                   Forgot password?
                 </button>
               </div>
@@ -307,14 +307,14 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
             </form>
           )}
 
-          {/* ── SIGN UP ── */}
+          {/* â”€â”€ SIGN UP â”€â”€ */}
           {view === "signup" && (
             <form onSubmit={handleSignup} className="flex flex-col gap-4">
               <InputField label="Full name" id="signup-name" placeholder="Jane Doe" value={signupName} onChange={setSignupName} required />
               <InputField label="Email" id="signup-email" type="email" placeholder="you@example.com" value={signupEmail} onChange={setSignupEmail} required />
               <InputField label="Password" id="signup-password" type="password" placeholder="Min. 8 characters" value={signupPassword} onChange={setSignupPassword} required />
 
-              <button type="submit" disabled={formLoading || !!success} className={primaryBtn}>
+              <button type="submit" disabled={formLoading || !!success} className={primaryBtn} style={{ background: 'linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.78))' }}>
                 {formLoading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : null}
                 Create account
               </button>
@@ -332,17 +332,17 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
             </form>
           )}
 
-          {/* ── FORGOT PASSWORD ── */}
+          {/* â”€â”€ FORGOT PASSWORD â”€â”€ */}
           {view === "forgot" && (
             <form onSubmit={handleForgot} className="flex flex-col gap-4">
               {forgotSent ? (
                 <p className="rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-3 text-sm text-green-600 dark:text-green-400">
-                  ✓ Reset link sent — check your inbox.
+                  âœ“ Reset link sent â€” check your inbox.
                 </p>
               ) : (
                 <>
                   <InputField label="Email" id="forgot-email" type="email" placeholder="you@example.com" value={forgotEmail} onChange={setForgotEmail} required />
-                  <button type="submit" disabled={formLoading} className={primaryBtn}>
+                  <button type="submit" disabled={formLoading} className={primaryBtn} style={{ background: 'linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.78))' }}>
                     {formLoading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : null}
                     Send reset link
                   </button>
@@ -351,14 +351,15 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
             </form>
           )}
 
-          <p className="mt-6 text-center text-xs text-muted-foreground">
+          <p className="mt-6 text-center text-xs text-white/25">
             By continuing, you agree to our{" "}
-            <a href="#" className="underline underline-offset-4 hover:text-foreground">Terms</a>{" "}
+            <a href="#" className="underline underline-offset-4 text-white/40 hover:text-white">Terms</a>{" "}
             and{" "}
-            <a href="#" className="underline underline-offset-4 hover:text-foreground">Privacy Policy</a>.
+            <a href="#" className="underline underline-offset-4 text-white/40 hover:text-white">Privacy Policy</a>.
           </p>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
 }
+
