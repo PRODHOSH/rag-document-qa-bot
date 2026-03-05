@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿<div align="center">
 
-## Getting Started
+# 🏆 top-devs
 
-First, run the development server:
+**Synthetix 4.0 · Programming Track · VIT Chennai · 5–6 March · 24 Hours**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Supabase](https://img.shields.io/badge/Supabase-Auth-3ecf8e?logo=supabase&logoColor=white)](https://supabase.com)
+
+---
+
+<pre>
+   O           O           O           O
+   /|\         /|\         /|\         /|\
+   / \         / \         / \         / \
+
+ PRODHOSH VS   S.SHARAN   ASHISH REDDY   NAWAZ
+   Developer     Content     Research     Design
+</pre>
+
+---
+
+</div>
+
+## 📸 Screenshots
+
+| Home Page | Core Feature | Output |
+|:---------:|:------------:|:------:|
+| ![Home](docs/screenshots/home.png) | ![Feature](docs/screenshots/feature.png) | ![Output](docs/screenshots/output.png) |
+
+---
+
+## 🚀 TopDevs — Project Name
+
+> One-line powerful tagline
+
+---
+
+## 📌 Problem Statement
+
+<!-- Describe the problem you're solving clearly and concisely. -->
+
+---
+
+## 💡 Our Solution
+
+<!-- Describe your solution and how it addresses the problem. -->
+
+---
+
+## ✨ Key Features
+
+- **Feature 1** — description
+- **Feature 2** — description
+- **Feature 3** — description
+
+---
+
+## 🏗 Architecture
+
+<!-- Insert architecture diagram here -->
+
+```
+┌────────────┐     ┌────────────┐     ┌────────────┐
+│  Frontend  │────▶│   Backend  │────▶│  Database  │
+│  Next.js   │     │  API Layer │     │  Supabase  │
+└────────────┘     └────────────┘     └────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Layer       | Technology                           |
+|-------------|--------------------------------------|
+| Framework   | Next.js 16 (App Router, TypeScript)  |
+| Styling     | Tailwind CSS v4, shadcn/ui           |
+| Auth        | Supabase (OAuth + Email)             |
+| Animation   | Framer Motion                        |
+| Icons       | Lucide React                         |
+| Deployment  | Vercel                               |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠 Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# 1. Clone the repo
+git clone https://github.com/top-devs/<repo>.git
+cd <repo>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 2. Install dependencies
+npm install
 
-## Deploy on Vercel
+# 3. Configure environment
+cp .env.example .env.local
+# Fill in your Supabase URL and anon key in .env.local
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 4. Start the dev server
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+---
+
+## 🎥 Demo Video
+
+> 📹 [Watch the demo →](#)
+
+---
+
+## 📊 Future Improvements
+
+- [ ] Improvement 1
+- [ ] Improvement 2
+- [ ] Improvement 3
+
+---
+
+## 👥 Team
+
+<div align="center">
+
+| | Name | Role |
+|:-:|:-----|:-----|
+| 👨‍💻 | **Prodhosh V.S** | Team Lead & Developer |
+| 🔍 | **S. Sharan** | Problem Solver & Researcher |
+| 💡 | **Ashish Reddy** | Research Lead & Problem Solver |
+| 🚀 | **Mohamed Nawaz** | Deployment & Design Lead |
+
+*Competing at **Synthetix 4.0** — organised by **HumanoidX Club, VIT Chennai** · ₹15k+ prize pool*
+
+</div>
+
+---
+
+<div align="center">
+<sub>Built with ❤️ in 24 hours · Synthetix 4.0 · 2025</sub>
+</div>
