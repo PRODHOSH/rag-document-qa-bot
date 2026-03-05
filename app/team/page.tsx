@@ -41,7 +41,7 @@ const team = [
     icon: Rocket,
     description:
       "Owns the end-to-end deployment pipeline and shapes the visual experience. The reason the product looks good and ships clean - every single time.",
-    avatar: "https://i.pravatar.cc/400?img=33",
+    avatar: "/contributors/nawaz.png",
     github: "https://github.com/nawaz080884-sudo",
     linkedin: "https://www.linkedin.com/in/mohamed-nawaz-n-248257393/",
     flip: true,
