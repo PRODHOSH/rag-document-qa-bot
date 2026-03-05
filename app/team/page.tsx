@@ -53,15 +53,15 @@ export default function TeamPage() {
     <div className="min-h-screen bg-background">
 
       {/* Header */}
-      <section className="w-full pt-20 pb-12 px-4">
+      <section className="w-full pt-16 pb-10 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <span className="inline-block border border-border rounded-full px-3 py-1 text-xs text-muted-foreground tracking-widest uppercase mb-5">
             Synthetix 4.0 &middot; Programming Track
           </span>
-          <h1 className="text-7xl md:text-9xl font-bold uppercase tracking-wide mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-wide mb-4">
             Our Core
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base max-w-2xl mx-auto">
             Meet the four people behind{" "}
             <span className="text-foreground font-semibold">top-devs</span> &mdash; the
             team that poured everything into 24 hours of building.
@@ -85,7 +85,7 @@ export default function TeamPage() {
               >
                 {/* Photo - left */}
                 {!member.flip && (
-                  <div className="relative w-full md:w-64 lg:w-72 shrink-0 overflow-hidden min-h-[220px]">
+                  <div className="relative w-full md:w-64 lg:w-72 shrink-0 overflow-hidden min-h-55">
                     <Image
                       src={member.avatar}
                       alt={member.name}
@@ -103,7 +103,7 @@ export default function TeamPage() {
                       {member.role}
                     </span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-wide mb-3">
+                  <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-wide mb-3">
                     {member.name}
                   </h2>
                   <p className="text-muted-foreground text-sm leading-relaxed max-w-xl">
@@ -141,7 +141,7 @@ export default function TeamPage() {
 
                 {/* Photo - right */}
                 {member.flip && (
-                  <div className="relative w-full md:w-64 lg:w-72 shrink-0 overflow-hidden min-h-[220px]">
+                  <div className="relative w-full md:w-64 lg:w-72 shrink-0 overflow-hidden min-h-55">
                     <Image
                       src={member.avatar}
                       alt={member.name}
@@ -162,7 +162,7 @@ export default function TeamPage() {
 
           {/* Poster */}
           <div className="group lg:w-80 shrink-0 border border-border rounded-2xl overflow-hidden bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-foreground/20">
-            <div className="relative w-full h-full min-h-[360px]">
+            <div className="relative w-full h-full min-h-90">
               <Image
                 src="/synthetix-poster.png"
                 alt="Synthetix 4.0 Hackathon Poster"
@@ -177,7 +177,7 @@ export default function TeamPage() {
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
               Shoutout
             </p>
-            <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-wide mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide mb-6">
               HumanoidX Club
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">

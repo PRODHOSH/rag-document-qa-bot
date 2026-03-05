@@ -11,6 +11,7 @@ type View = "login" | "signup" | "forgot";
 interface AuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
 function GoogleIcon({ className }: { className?: string }) {
@@ -105,7 +106,7 @@ const primaryBtn = cn(
   "disabled:pointer-events-none disabled:opacity-60"
 );
 
-export function AuthModal({ open, onOpenChange }: AuthModalProps) {
+export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
   const [view, setView] = React.useState<View>("login");
 
   // login
@@ -145,7 +146,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     setOauthLoading(provider);
     await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: `${window.location.origin}/auth/callback?next=/chat` },
     });
     setOauthLoading(null);
   }
@@ -161,6 +162,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     setFormLoading(false);
     if (error) { setError(error.message); return; }
     onOpenChange(false);
+    onSuccess?.();
   }
 
   async function handleSignup(e: React.FormEvent) {

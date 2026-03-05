@@ -1,33 +1,23 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 
-const footerLinks = {
-  Product: [
-    { label: "Home", href: "/" },
-    { label: "About Us", href: "/about" },
-    { label: "Contributors", href: "/contributors" },
-    { label: "Team", href: "/team" },
-  ],
-  Resources: [
-    { label: "Documentation", href: "#" },
-    { label: "API Reference", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Status", href: "#" },
-  ],
-  Company: [
-    { label: "Careers", href: "#" },
-    { label: "Press", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-  ],
-};
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Team", href: "/team" },
+];
+
+const teamMembers = [
+  { name: "Prodhosh V.S", href: "https://github.com/PRODHOSH" },
+  { name: "S. Sharan", href: "https://www.instagram.com/sharansundarp/" },
+  { name: "Ashish Reddy", href: "https://www.instagram.com/1xcidd/" },
+  { name: "Mohamed Nawaz", href: "https://www.linkedin.com/in/mohamed-nawaz-n-248257393/" },
+];
 
 const socials = [
-  { icon: Github, href: "https://github.com", label: "GitHub" },
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
+  { icon: Github, href: "https://github.com/PRODHOSH", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:hello@topdevs.io", label: "Email" },
+  { icon: Mail, href: "mailto:hello@flashfetch.io", label: "Email" },
 ];
 
 export function Footer() {
@@ -35,23 +25,23 @@ export function Footer() {
     <footer className="w-full border-t border-border bg-background">
       <div className="container mx-auto px-4 py-16">
         {/* Top row */}
-        <div className="grid gap-12 md:grid-cols-4">
+        <div className="grid gap-12 sm:grid-cols-2 md:grid-cols-3">
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2.5">
               <Image
                 src="/favicon.ico"
-                alt="top-devs logo"
+                alt="FlashFetch logo"
                 width={28}
                 height={28}
                 className="rounded-md"
               />
               <span className="text-xl font-semibold tracking-tight text-foreground">
-                top-devs
+                FlashFetch
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Connecting the world's best developers with businesses that need them most.
+              An AI-powered document intelligence system — ask questions from your documents, instantly.
             </p>
             {/* Socials */}
             <div className="flex items-center gap-2">
@@ -70,30 +60,47 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {Object.entries(footerLinks).map(([section, links]) => (
-            <div key={section} className="flex flex-col gap-4">
-              <h3 className="text-sm font-semibold text-foreground">{section}</h3>
-              <ul className="flex flex-col gap-2.5">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Navigate */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-foreground">Navigate</h3>
+            <ul className="flex flex-col gap-2.5">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Team */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-foreground">Team</h3>
+            <ul className="flex flex-col gap-2.5">
+              {teamMembers.map((member) => (
+                <li key={member.name}>
+                  <a
+                    href={member.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {member.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} top-devs. All rights reserved.
+            © {new Date().getFullYear()} FlashFetch. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">

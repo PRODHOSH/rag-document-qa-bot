@@ -127,3 +127,50 @@
     font-weight: 600;
   }
 }
+
+/* ── RAG Visualization animations ── */
+@keyframes rag-float-a {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-7px); }
+}
+@keyframes rag-float-b {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+@keyframes rag-float-c {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-9px); }
+}
+@keyframes rag-dash {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes rag-pulse {
+  0%, 100% { opacity: 0.15; }
+  50%       { opacity: 0.45; }
+}
+@keyframes rag-orb {
+  0%, 100% { r: 22; opacity: 0.15; }
+  50%       { r: 28; opacity: 0.4; }
+}
+@keyframes rag-dot {
+  0%   { cx: 0;   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.rag-doc-a { animation: rag-float-a 4s ease-in-out infinite; }
+.rag-doc-b { animation: rag-float-b 5s ease-in-out infinite; animation-delay: -1.5s; }
+.rag-doc-c { animation: rag-float-c 4.5s ease-in-out infinite; animation-delay: -0.8s; }
+
+.rag-line {
+  stroke-dasharray: 9 6;
+  animation: rag-dash 1.8s linear infinite;
+}
+.rag-line-b { animation-delay: -0.6s; }
+.rag-line-c { animation-delay: -1.1s; }
+.rag-line-d { animation-delay: -0.3s; animation-duration: 1.4s; }
+.rag-line-e { animation-delay: -0.9s; animation-duration: 1.3s; }
+
+.rag-ring { animation: rag-orb 2.5s ease-in-out infinite; }
+.rag-pulse { animation: rag-pulse 2.2s ease-in-out infinite; }

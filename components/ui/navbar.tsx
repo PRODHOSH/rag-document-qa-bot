@@ -3,16 +3,15 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Sun, Moon, Menu, X, LogIn } from "lucide-react";
+import { Sun, Moon, Menu, X, LogIn, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AuthModal } from "@/components/ui/auth-modal";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/contributors", label: "Contributors" },
   { href: "/team", label: "Team" },
 ];
 
@@ -42,7 +41,25 @@ function ThemeToggle() {
 export function Navbar() {
   const [authOpen, setAuthOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [user, setUser] = React.useState<any>(null);
   const pathname = usePathname();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!isSupabaseConfigured) return;
+    const supabase = createClient();
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  function handleChatClick() {
+    if (user) router.push("/chat");
+    else setAuthOpen(true);
+  }
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -57,14 +74,14 @@ export function Navbar() {
             <Link href="/" className="flex items-center gap-2.5">
               <Image
                 src="/favicon.ico"
-                alt="top-devs logo"
+                alt="FlashFetch logo"
                 width={32}
                 height={32}
                 className="rounded-md"
                 priority
               />
               <span className="text-xl font-bold tracking-tight text-foreground">
-                top-devs
+                FlashFetch
               </span>
             </Link>
           </div>
@@ -86,16 +103,29 @@ export function Navbar() {
                 >
                   {link.label}
                   {active && (
-                    <span className="absolute inset-x-4 -bottom-[1px] h-0.5 rounded-full bg-foreground" />
+                    <span className="absolute inset-x-4 -bottom-px h-0.5 rounded-full bg-foreground" />
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right — theme toggle + sign in */}
+          {/* Right — theme toggle + chat + sign in */}
           <div className="flex flex-1 items-center justify-end gap-2">
             <ThemeToggle />
+
+            <button
+              onClick={handleChatClick}
+              className={cn(
+                "hidden items-center gap-2 rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground",
+                "transition-colors hover:bg-accent hover:text-accent-foreground",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "md:flex"
+              )}
+            >
+              <MessageSquare className="h-4 w-4" />
+              Chat
+            </button>
 
             <button
               onClick={() => setAuthOpen(true)}
@@ -147,6 +177,16 @@ export function Navbar() {
                 );
               })}
               <button
+                onClick={() => { setMobileOpen(false); handleChatClick(); }}
+                className={cn(
+                  "mt-2 flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-base font-medium text-foreground",
+                  "transition-colors hover:bg-accent"
+                )}
+              >
+                <MessageSquare className="h-4 w-4" />
+                Chat
+              </button>
+              <button
                 onClick={() => { setMobileOpen(false); setAuthOpen(true); }}
                 className={cn(
                   "mt-2 flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-base font-medium text-primary-foreground",
@@ -161,7 +201,7 @@ export function Navbar() {
         )}
       </header>
 
-      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} onSuccess={() => router.push("/chat")} />
     </>
   );
 }
