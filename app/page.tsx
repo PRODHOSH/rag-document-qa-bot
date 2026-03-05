@@ -1,5 +1,6 @@
 ﻿import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
+import { UpgradeButton } from "@/components/ui/upgrade-button";
 
 /* ─── hero product mock ─────────────────────────────── */
 function ProductMock() {
@@ -323,6 +324,115 @@ export default function Home() {
               </FadeIn>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ══ PRICING ══ */}
+      <section id="pricing" className="py-24 px-6 border-t border-white/6">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn direction="up" className="text-center mb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/30 mb-3">Pricing</p>
+            <h2
+              className="text-3xl sm:text-4xl font-bold"
+              style={{
+                background: "linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.55))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                letterSpacing: "-0.04em",
+              }}
+            >
+              Simple, Honest Pricing
+            </h2>
+            <p className="mt-3 text-sm text-white/40 max-w-md mx-auto">
+              Start for free. Upgrade when you need more.
+            </p>
+          </FadeIn>
+
+          <div className="grid gap-6 sm:grid-cols-2 max-w-3xl mx-auto">
+
+            {/* Free */}
+            <FadeIn delay={60} direction="up">
+              <div className="relative flex flex-col rounded-2xl border border-white/10 bg-white/2 p-8 h-full">
+                <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">Free</p>
+                <div className="flex items-end gap-1 mb-1">
+                  <span className="text-5xl font-black text-white tracking-tight">₹0</span>
+                </div>
+                <p className="text-xs text-white/30 mb-8">Forever free — no card required</p>
+
+                <ul className="flex flex-col gap-3 mb-10 flex-1">
+                  {[
+                    "Up to 10 AI chats / month",
+                    "Upload up to 2 documents",
+                    "PDF · TXT · Markdown support",
+                    "Cited answers with sources",
+                    "Standard response speed",
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-white/55">
+                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-white/30" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/chat"
+                  className="w-full flex items-center justify-center rounded-xl border border-white/15 py-3 text-sm font-medium text-white/70 hover:text-white hover:border-white/30 transition-all"
+                >
+                  Get started free
+                </Link>
+              </div>
+            </FadeIn>
+
+            {/* Pro */}
+            <FadeIn delay={120} direction="up">
+              <div className="relative flex flex-col rounded-2xl border border-white/20 bg-white/4 p-8 h-full ring-1 ring-white/10">
+                {/* Popular badge */}
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-black tracking-wide">
+                    Most Popular
+                  </span>
+                </div>
+
+                <p className="text-xs font-semibold uppercase tracking-widest text-white/30 mb-4">Pro</p>
+                <div className="flex items-end gap-1 mb-1">
+                  <span className="text-5xl font-black text-white tracking-tight">₹999</span>
+                  <span className="text-sm text-white/35 mb-2.5">/month</span>
+                </div>
+                <p className="text-xs text-white/30 mb-8">Billed monthly · Cancel anytime</p>
+
+                <ul className="flex flex-col gap-3 mb-10 flex-1">
+                  {[
+                    "Unlimited AI chats",
+                    "Upload unlimited documents",
+                    "PDF · TXT · Markdown support",
+                    "Cited answers with sources",
+                    "Priority response speed",
+                    "Confidence scoring & analytics",
+                    "Email support",
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-white/75">
+                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-white" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                <UpgradeButton />
+              </div>
+            </FadeIn>
+          </div>
+
+          {/* Fine print */}
+          <FadeIn delay={180}>
+            <p className="text-center text-xs text-white/20 mt-8">
+              Prices in INR · Secure payment via Razorpay · Unused chats don&apos;t roll over
+            </p>
+          </FadeIn>
         </div>
       </section>
 

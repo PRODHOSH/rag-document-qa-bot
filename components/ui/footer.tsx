@@ -17,7 +17,7 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="FlashFetch" className="h-6 w-6 rounded-md object-contain" />
+              <img src="/logo.png" alt="FlashFetch" className="h-9 w-9 rounded-lg object-contain" />
               <span className="text-sm font-semibold text-white">FlashFetch</span>
             </Link>
             <p className="text-xs leading-relaxed text-white/40 max-w-xs">

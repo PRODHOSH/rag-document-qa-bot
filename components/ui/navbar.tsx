@@ -3,9 +3,10 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, X, LogOut, MessageSquare, ChevronDown } from "lucide-react";
+import { Menu, X, LogOut, MessageSquare, ChevronDown, Settings } from "lucide-react";
 import { AuthModal } from "@/components/ui/auth-modal";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { resolveAvatar } from "@/lib/avatar";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +20,7 @@ export function Navbar() {
   const [mobileOpen,  setMobileOpen]  = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [user,        setUser]        = React.useState<any>(null);
+  const [avatarSrc,   setAvatarSrc]   = React.useState<string | null>(null);
   const router      = useRouter();
   const profileRef  = React.useRef<HTMLDivElement>(null);
 
@@ -37,9 +39,16 @@ export function Navbar() {
     if (!isSupabaseConfigured) return;
     const supabase = createClient();
     if (!supabase) return;
-    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    supabase.auth.getUser().then(({ data }) => {
+      const u = data.user ?? null;
+      setUser(u);
+      if (u) setAvatarSrc(resolveAvatar(u.id, u.user_metadata?.avatar_url));
+    });
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) setAvatarSrc(resolveAvatar(u.id, u.user_metadata?.avatar_url));
+      else setAvatarSrc(null);
     });
     return () => listener.subscription.unsubscribe();
   }, []);
@@ -57,7 +66,7 @@ export function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="FlashFetch" className="h-7 w-7 rounded-md object-contain" />
+              <img src="/logo.png" alt="FlashFetch" className="h-8 w-8 rounded-lg object-contain" />
               <span className="text-base font-semibold text-white tracking-tight">FlashFetch</span>
             </Link>
 
@@ -92,8 +101,11 @@ export function Navbar() {
                     onClick={() => setProfileOpen((o) => !o)}
                     className="flex items-center gap-2 rounded-full border border-white/10 bg-white/4 pl-1 pr-3 py-1 transition-colors hover:border-white/20 hover:bg-white/8"
                   >
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white">
-                      {(user?.user_metadata?.full_name || user?.email || "U")[0].toUpperCase()}
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white overflow-hidden">
+                      {avatarSrc
+                        ? <img src={avatarSrc} alt="avatar" className="h-full w-full object-cover" />
+                        : (user?.user_metadata?.full_name || user?.email || "U")[0].toUpperCase()
+                      }
                     </div>
                     <span className="text-sm text-white/70">
                       {user?.user_metadata?.full_name || user?.email?.split("@")[0]}
@@ -110,6 +122,13 @@ export function Navbar() {
                         <p className="text-xs text-white/35 truncate mt-0.5">{user?.email}</p>
                       </div>
                       <div className="p-1.5">
+                        <button
+                          onClick={() => { setProfileOpen(false); router.push("/profile"); }}
+                          className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-white/60 transition-colors hover:bg-white/6 hover:text-white"
+                        >
+                          <Settings className="h-4 w-4" />
+                          Settings
+                        </button>
                         <button
                           onClick={() => { setProfileOpen(false); router.push("/chat"); }}
                           className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-white/60 transition-colors hover:bg-white/6 hover:text-white"

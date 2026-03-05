@@ -4,10 +4,11 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
   Send, LogOut, ChevronDown, ChevronUp, Bot, User,
-  Upload, FileText, Trash2, Plus, CircleDot,
+  Upload, FileText, Trash2, Plus, CircleDot, Settings,
 } from "lucide-react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { resolveAvatar } from "@/lib/avatar";
 
 const RAG_API    = process.env.NEXT_PUBLIC_RAG_API_URL ?? "http://localhost:8000";
 const DOCS_API   = RAG_API + "/documents";
@@ -29,30 +30,37 @@ interface Message  {
 // ── Small components ─────────────────────────────────────
 function ConfidenceBadge({ level }: { level: "high" | "medium" | "low" }) {
   const map = {
-    high:   "bg-green-500/15 text-green-400 border-green-500/25",
-    medium: "bg-yellow-500/15 text-yellow-400 border-yellow-500/25",
-    low:    "bg-red-500/15 text-red-400 border-red-500/25",
+    high:   { bar: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30", dot: "bg-emerald-400", label: "High confidence" },
+    medium: { bar: "bg-amber-500/15 text-amber-400 border-amber-500/30",   dot: "bg-amber-400",   label: "Medium confidence" },
+    low:    { bar: "bg-red-500/15 text-red-400 border-red-500/30",         dot: "bg-red-400",     label: "Low confidence" },
   };
+  const c = map[level];
   return (
-    <span className={cn("inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium", map[level])}>
-      {level} confidence
+    <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium", c.bar)}>
+      <span className={cn("h-1.5 w-1.5 rounded-full", c.dot)} />
+      {c.label}
     </span>
   );
 }
 
 function SourceCard({ source }: { source: Source }) {
   const [open, setOpen] = React.useState(false);
+  const pct = Math.round(source.score * 100);
+  const pctColor = pct >= 68 ? "text-emerald-400" : pct >= 52 ? "text-amber-400" : "text-red-400";
   return (
-    <div className="rounded-lg border border-white/8 bg-white/3 overflow-hidden">
-      <button onClick={() => setOpen((o) => !o)} className="flex w-full items-center gap-2 px-3 py-2 text-left">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-white/30">doc</span>
-        <span className="flex-1 truncate text-xs text-white/60">{source.document}</span>
-        <span className="shrink-0 text-[11px] text-white/30">{Math.round(source.score * 100)}%</span>
-        {open ? <ChevronUp className="h-3.5 w-3.5 shrink-0 text-white/30" /> : <ChevronDown className="h-3.5 w-3.5 shrink-0 text-white/30" />}
+    <div className="rounded-lg border border-white/8 bg-white/2 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-2 px-3 py-2 text-left hover:bg-white/4 transition-colors"
+      >
+        <FileText className="h-3.5 w-3.5 shrink-0 text-white/25" />
+        <span className="flex-1 truncate text-xs text-white/60 font-medium">{source.document}</span>
+        <span className={cn("shrink-0 text-xs font-semibold", pctColor)}>{pct}%</span>
+        {open ? <ChevronUp className="h-3 w-3 shrink-0 text-white/25" /> : <ChevronDown className="h-3 w-3 shrink-0 text-white/25" />}
       </button>
       {open && (
-        <div className="border-t border-white/8 px-3 py-2">
-          <p className="text-xs leading-relaxed text-white/50">{source.snippet}</p>
+        <div className="border-t border-white/6 px-3 py-2.5">
+          <p className="text-xs leading-relaxed text-white/45 italic">&ldquo;{source.snippet}&rdquo;</p>
         </div>
       )}
     </div>
@@ -64,31 +72,36 @@ function MessageBubble({ msg }: { msg: Message }) {
   return (
     <div className={cn("flex gap-3", isUser ? "flex-row-reverse" : "flex-row")}>
       <div className={cn(
-        "mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border",
-        isUser ? "border-white/15 bg-white/8" : "border-white/10 bg-[#111]"
+        "mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border text-xs font-semibold",
+        isUser ? "border-white/15 bg-white/8 text-white/60" : "border-white/10 bg-[#111] text-white/40"
       )}>
-        {isUser ? <User className="h-4 w-4 text-white/60" /> : <Bot className="h-4 w-4 text-white/60" />}
+        {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
       </div>
       <div className={cn("flex max-w-[75%] flex-col gap-2", isUser && "items-end")}>
-        <div className={cn(
-          "rounded-2xl px-4 py-3 text-sm leading-relaxed",
-          isUser ? "rounded-tr-sm bg-white text-black" : "rounded-tl-sm border border-white/8 bg-[#0f0f0f] text-white/85"
-        )}>
-          {msg.loading ? (
-            <div className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:0ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:300ms]" />
-            </div>
-          ) : msg.content}
-        </div>
+        {msg.loading ? (
+          <div className="rounded-2xl rounded-tl-sm border border-white/8 bg-[#0f0f0f] px-4 py-3.5 flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:300ms]" />
+          </div>
+        ) : (
+          <div className={cn(
+            "rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap",
+            isUser ? "rounded-tr-sm bg-white text-black font-medium" : "rounded-tl-sm border border-white/8 bg-[#0f0f0f] text-white/85"
+          )}>
+            {msg.content}
+          </div>
+        )}
         {!isUser && !msg.loading && msg.confidence && (
-          <div className="flex flex-col gap-1.5 w-full">
+          <div className="flex flex-col gap-2 w-full">
             <ConfidenceBadge level={msg.confidence} />
             {msg.sources && msg.sources.length > 0 && (
-              <div className="flex flex-col gap-1">
-                {msg.sources.map((s, i) => <SourceCard key={i} source={s} />)}
-              </div>
+              <>
+                <p className="text-[10px] font-semibold tracking-widest text-white/20 uppercase px-0.5">Sources</p>
+                <div className="flex flex-col gap-1.5">
+                  {msg.sources.map((s, i) => <SourceCard key={i} source={s} />)}
+                </div>
+              </>
             )}
           </div>
         )}
@@ -102,19 +115,28 @@ export default function ChatPage() {
   const router = useRouter();
   const [user,        setUser]        = React.useState<any>(null);
   const [authChecked, setAuthChecked] = React.useState(false);
-  const [messages,    setMessages]    = React.useState<Message[]>([{
-    id: "welcome", role: "assistant",
-    content: "Hi! I'm your AI assistant. Upload documents on the left, then ask me anything about them.",
-  }]);
+  const [messages,    setMessages]    = React.useState<Message[]>([]);
   const [input,     setInput]     = React.useState("");
   const [sending,   setSending]   = React.useState(false);
   const [docs,      setDocs]      = React.useState<DocFile[]>([]);
   const [uploading, setUploading] = React.useState(false);
   const [deleting,  setDeleting]  = React.useState<string | null>(null);
+  const [profileOpen, setProfileOpen] = React.useState(false);
 
-  const bottomRef  = React.useRef<HTMLDivElement>(null);
-  const inputRef   = React.useRef<HTMLTextAreaElement>(null);
+  const bottomRef    = React.useRef<HTMLDivElement>(null);
+  const inputRef     = React.useRef<HTMLTextAreaElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const profileRef   = React.useRef<HTMLDivElement>(null);
+
+  // Close profile dropdown on outside click
+  React.useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node))
+        setProfileOpen(false);
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   // ── Auth guard ─────────────────────────────────────────
   React.useEffect(() => {
@@ -239,6 +261,7 @@ export default function ChatPage() {
   }
 
   const displayName  = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "You";
+  const avatarSrc    = user ? resolveAvatar(user.id, user.user_metadata?.avatar_url) : null;
   const avatarLetter = (displayName as string)[0]?.toUpperCase() ?? "U";
 
   return (
@@ -269,36 +292,51 @@ export default function ChatPage() {
         </div>
 
         {/* Doc list */}
-        <div className="flex-1 overflow-y-auto py-2">
+        <div className="flex-1 overflow-y-auto p-3 space-y-1">
           {docs.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-              <Upload className="h-8 w-8 text-white/10" />
-              <p className="text-xs text-white/25 leading-relaxed">
-                No documents yet.<br />Click + to upload.
-              </p>
-            </div>
-          ) : (
-            docs.map((doc) => (
-              <div
-                key={doc.name}
-                className="group flex items-center gap-2.5 px-3 py-2 mx-1 rounded-lg hover:bg-white/4 transition-colors"
-              >
-                <FileText className="h-4 w-4 shrink-0 text-white/30" />
-                <div className="flex-1 min-w-0">
-                  <p className="truncate text-xs text-white/70 leading-tight">{doc.name}</p>
-                  <p className="text-[11px] text-white/25">{doc.size_kb} KB</p>
-                </div>
-                <button
-                  onClick={() => handleDelete(doc.name)}
-                  disabled={deleting === doc.name}
-                  className="opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400 transition-all"
-                >
-                  {deleting === doc.name
-                    ? <span className="h-3 w-3 animate-spin rounded-full border border-white/20 border-t-white/60 block" />
-                    : <Trash2 className="h-3.5 w-3.5" />}
-                </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full mt-2 flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-white/10 px-4 py-8 text-center transition-all hover:border-white/20 hover:bg-white/3 group"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
+                <Upload className="h-5 w-5 text-white/30" />
               </div>
-            ))
+              <div>
+                <p className="text-xs font-medium text-white/40">Drop files here</p>
+                <p className="text-[10px] text-white/20 mt-0.5">PDF · TXT · MD</p>
+              </div>
+            </button>
+          ) : (
+            <>
+              {docs.map((doc) => (
+                <div
+                  key={doc.name}
+                  className="group flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-white/5 transition-colors"
+                >
+                  <FileText className="h-4 w-4 shrink-0 text-white/30" />
+                  <div className="flex-1 min-w-0">
+                    <p className="truncate text-xs text-white/70 font-medium leading-tight">{doc.name}</p>
+                    <p className="text-[10px] text-white/25 mt-0.5">{doc.size_kb} KB</p>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(doc.name)}
+                    disabled={deleting === doc.name}
+                    className="opacity-0 group-hover:opacity-100 flex h-5 w-5 items-center justify-center rounded hover:bg-red-500/20 text-white/20 hover:text-red-400 transition-all"
+                  >
+                    {deleting === doc.name
+                      ? <span className="h-3 w-3 animate-spin rounded-full border border-white/20 border-t-white/60 block" />
+                      : <Trash2 className="h-3.5 w-3.5" />}
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg border border-dashed border-white/8 hover:border-white/15 hover:bg-white/3 transition-all mt-1"
+              >
+                <Upload className="h-3.5 w-3.5 text-white/20" />
+                <span className="text-xs text-white/25">Add more files</span>
+              </button>
+            </>
           )}
         </div>
 
@@ -324,23 +362,78 @@ export default function ChatPage() {
             <span className="text-sm font-semibold text-white tracking-tight">AI Chat</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white">
-              {avatarLetter}
+            <div ref={profileRef} className="relative">
+              <button
+                onClick={() => setProfileOpen((o) => !o)}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/4 pl-1 pr-3 py-1 transition-colors hover:border-white/20 hover:bg-white/8"
+              >
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white overflow-hidden">
+                  {avatarSrc
+                    ? <img src={avatarSrc} alt="avatar" className="h-full w-full object-cover" />
+                    : avatarLetter
+                  }
+                </div>
+                <span className="hidden text-sm text-white/70 sm:block">{displayName}</span>
+                <ChevronDown className={cn("h-3.5 w-3.5 text-white/30 transition-transform", profileOpen && "rotate-180")} />
+              </button>
+
+              {profileOpen && (
+                <div className="absolute right-0 top-full mt-2 w-52 rounded-xl border border-white/10 bg-[#0f0f0f] shadow-2xl z-50 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-white/8">
+                    <p className="text-sm font-medium text-white truncate">{displayName}</p>
+                    <p className="text-xs text-white/35 truncate mt-0.5">{user?.email}</p>
+                  </div>
+                  <div className="p-1.5 flex flex-col gap-0.5">
+                    <button
+                      onClick={() => { setProfileOpen(false); router.push("/profile"); }}
+                      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-white/60 transition-colors hover:bg-white/6 hover:text-white"
+                    >
+                      <Settings className="h-4 w-4" />
+                      Settings
+                    </button>
+                    <button
+                      onClick={() => { setProfileOpen(false); signOut(); }}
+                      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-white/60 transition-colors hover:bg-white/6 hover:text-red-400"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign out
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-            <span className="hidden text-sm text-white/50 sm:block">{displayName}</span>
-            <button
-              onClick={signOut}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/40 transition-colors hover:border-white/20 hover:text-white"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              Sign out
-            </button>
           </div>
         </header>
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
           <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+            {messages.length === 0 && (
+              <div className="flex flex-col items-center justify-center gap-5 py-20 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                  <Bot className="h-7 w-7 text-white/30" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white/50">Ask anything about your documents</p>
+                  <p className="mt-1 text-xs text-white/25">
+                    {docs.length === 0 ? "Upload a file on the left to get started" : "Your documents are ready — ask a question below"}
+                  </p>
+                </div>
+                {docs.length > 0 && (
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {["Summarize this document", "What are the key points?", "What is the main topic?"].map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => { inputRef.current && (inputRef.current.value = s); setInput(s); inputRef.current?.focus(); }}
+                        className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/35 hover:text-white/60 hover:border-white/20 transition-colors"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             {messages.map((msg) => <MessageBubble key={msg.id} msg={msg} />)}
             <div ref={bottomRef} />
           </div>

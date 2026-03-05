@@ -14,10 +14,10 @@ load_dotenv()
 
 # ── Config ────────────────────────────────────────────────
 GROQ_MODEL       = "llama-3.1-8b-instant"
-TEMPERATURE      = 0.2
-SCORE_THRESHOLD  = 0.35   # below this → "I don't know"
-HIGH_CONFIDENCE  = 0.75
-MED_CONFIDENCE   = 0.50
+TEMPERATURE      = 0.1
+SCORE_THRESHOLD  = 0.40   # below this → "I don't know"
+HIGH_CONFIDENCE  = 0.68
+MED_CONFIDENCE   = 0.52
 # ──────────────────────────────────────────────────────────
 
 NO_ANSWER = (
@@ -86,17 +86,19 @@ def generate(query: str, retrieved: list[dict]) -> dict:
 
     # ── System prompt ──────────────────────────────────────
     system_prompt = (
-        "You are a precise question-answering assistant. "
-        "Answer the user's question using ONLY the context provided below. "
-        "Do not use any outside knowledge. "
-        "If the context does not contain enough information to answer, "
-        f'say exactly: "{NO_ANSWER}"'
+        "You are a strict document Q&A assistant. "
+        "Rules you MUST follow:\n"
+        "1. Answer ONLY using the context below — no outside knowledge.\n"
+        "2. Be direct and concise. Avoid padding or filler phrases.\n"
+        "3. If the exact answer is not in the context, respond EXACTLY with: "
+        f'"{NO_ANSWER}"\n'
+        "4. Never guess, infer beyond what is written, or fabricate details."
     )
 
     user_prompt = (
         f"Context:\n{context}\n\n"
         f"Question: {query}\n\n"
-        "Answer (based strictly on the context above):"
+        "Answer (strictly from the context — no outside knowledge):"
     )
 
     # ── Call Groq ──────────────────────────────────────────
@@ -112,14 +114,19 @@ def generate(query: str, retrieved: list[dict]) -> dict:
 
     answer = response.choices[0].message.content.strip()
 
-    # ── Format sources ─────────────────────────────────────
+    # If model admits it can't find it, strip sources
+    if NO_ANSWER.split(".")[0].lower() in answer.lower():
+        return {"answer": NO_ANSWER, "sources": [], "confidence": "low"}
+
+    # ── Format sources (only above threshold) ─────────────
     sources = [
         {
             "document": chunk["source"],
-            "snippet":  chunk["text"][:200].strip(),   # first 200 chars
+            "snippet":  chunk["text"][:250].strip(),
             "score":    chunk["score"],
         }
         for chunk in retrieved
+        if chunk["score"] >= SCORE_THRESHOLD
     ]
 
     return {
