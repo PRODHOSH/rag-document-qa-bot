@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/ui/navbar";
-import { Footer } from "@/components/ui/footer";
+import { LayoutShell } from "@/components/layout-shell";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -14,6 +13,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "FlashFetch — AI Document Intelligence",
   description: "Ask questions across your documents. Get cited answers instantly, powered by RAG.",
+  icons: { icon: "/logo.png" },
 };
 
 export default function RootLayout({
@@ -31,9 +31,9 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <Navbar />
-          {children}
-          <Footer />
+          <LayoutShell>
+            {children}
+          </LayoutShell>
         </ThemeProvider>
       </body>
     </html>

@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Github, X, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -107,6 +108,7 @@ const primaryBtn = cn(
 );
 
 export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
+  const router = useRouter();
   const [view, setView] = React.useState<View>("login");
 
   // login
@@ -163,6 +165,7 @@ export function AuthModal({ open, onOpenChange, onSuccess }: AuthModalProps) {
     if (error) { setError(error.message); return; }
     onOpenChange(false);
     onSuccess?.();
+    router.push("/chat");
   }
 
   async function handleSignup(e: React.FormEvent) {

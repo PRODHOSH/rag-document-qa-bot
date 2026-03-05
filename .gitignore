@@ -40,5 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# RAG backend generated index (rebuilt on deploy)
+rag-backend/index/
+
 
 
