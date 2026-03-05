@@ -41,29 +41,34 @@ chrome.storage.local.get(["ff_token", "ff_api_url", "ff_prefill"], (data) => {
 function detectOpenFile() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tab = tabs[0];
-    if (!tab) return;
+    if (!tab || !tab.url) return;
 
-    const url      = tab.url || "";
+    const url      = tab.url;
     const isFile   = url.startsWith("file://");
     const isPDF    = url.toLowerCase().endsWith(".pdf");
-    const fileName = url.split("/").pop().split("?")[0] || "document";
+    // Decode %20 etc in filename
+    const rawName  = url.split("/").pop().split("?")[0] || "document";
+    const fileName = decodeURIComponent(rawName);
 
-    // Only auto-extract local files — not regular websites
+    // Only handle local files
     if (!isFile) return;
 
     if (isPDF) {
+      // Chrome PDF viewer blocks content scripts — show helpful UI
       showFileBanner(fileName, "pdf");
-      setStatus("PDF detected — Chrome can't read PDF text directly. Use the ⬆ button to upload it.", "error");
+      clearEmptyState();
+      appendPDFHelp(fileName);
       return;
     }
 
-    // Extract text from the open local file
+    // Local text file — send message to content script
     chrome.tabs.sendMessage(tab.id, { action: "getFileContext" }, (res) => {
       if (chrome.runtime.lastError || !res || !res.text) {
         // Content script not injected yet — inject manually
         chrome.scripting.executeScript(
           { target: { tabId: tab.id }, files: ["content.js"] },
           () => {
+            if (chrome.runtime.lastError) return;
             chrome.tabs.sendMessage(tab.id, { action: "getFileContext" }, (res2) => {
               if (res2 && res2.text) setFileContext(res2);
             });
@@ -84,6 +89,32 @@ function setFileContext(res) {
     `📄 I've read "${res.title}" (${Math.ceil(res.text.length / 1000)}k chars). Ask me anything about it!`
   );
   questionInput.focus();
+}
+
+function appendPDFHelp(fileName) {
+  const div = document.createElement("div");
+  div.className = "msg assistant";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = `
+    <strong>📕 ${fileName}</strong><br/><br/>
+    Chrome's PDF viewer doesn't allow extensions to read PDF text directly.<br/><br/>
+    <strong>To ask questions about this PDF:</strong><br/>
+    1. Click <strong>⬆</strong> (Upload) above to send it to FlashFetch<br/>
+    2. Then ask your question here
+  `;
+  div.appendChild(bubble);
+
+  const uploadBtn = document.createElement("button");
+  uploadBtn.className = "btn-primary";
+  uploadBtn.style.cssText = "margin-top:10px;font-size:12px;padding:8px;";
+  uploadBtn.textContent = "⬆  Upload this PDF now";
+  uploadBtn.addEventListener("click", () => savePageBtn.click());
+  div.appendChild(uploadBtn);
+
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 // ─── File banner ───────────────────────────────────────────────────────────────
@@ -208,31 +239,69 @@ async function sendQuestion() {
   });
 }
 
-// ─── Save current page ────────────────────────────────────────────────────────
+// ─── Save current page / upload PDF ──────────────────────────────────────────
 savePageBtn.addEventListener("click", async () => {
   chrome.storage.local.get(["ff_token", "ff_api_url"], async (data) => {
     const apiUrl = data.ff_api_url || DEFAULT_API;
-    setStatus("Extracting page content…");
 
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const tab = tabs[0];
+      if (!tab || !tab.url) { setStatus("Cannot read this tab", "error"); return; }
+
+      const url      = tab.url;
+      const isPDF    = url.toLowerCase().endsWith(".pdf");
+      const isFile   = url.startsWith("file://");
+      const rawName  = url.split("/").pop().split("?")[0] || "document";
+      const fileName = decodeURIComponent(rawName);
+
+      // ── PDF or any local file: use fetch(file://) to read bytes ──────────
+      if (isFile) {
+        setStatus(`Reading ${fileName}…`);
+        try {
+          const fileRes  = await fetch(url);
+          const blob     = await fileRes.blob();
+          const mimeType = isPDF ? "application/pdf" : "text/plain";
+          const upload   = new Blob([blob], { type: mimeType });
+          const formData = new FormData();
+          formData.append("file", upload, fileName);
+          setStatus("Uploading to FlashFetch…");
+
+          const headers = {};
+          if (data.ff_token) headers["Authorization"] = `Bearer ${data.ff_token}`;
+
+          const res = await fetch(`${apiUrl}/upload`, { method: "POST", headers, body: formData });
+          if (!res.ok) throw new Error(`Upload failed ${res.status}`);
+
+          setStatus(`✓ Uploaded: ${fileName}`, "success");
+          clearEmptyState();
+          appendMessage("assistant",
+            `✅ "${fileName}" uploaded and indexed! You can now ask questions about it using the main chat.`
+          );
+          setTimeout(() => hideStatus(), 3000);
+        } catch (err) {
+          setStatus(`Error: ${err.message}`, "error");
+        }
+        return;
+      }
+
+      // ── Web page: extract text via content script ─────────────────────────
+      setStatus("Extracting page content…");
       chrome.tabs.sendMessage(tab.id, { action: "getPageText" }, async (response) => {
         if (chrome.runtime.lastError || !response) {
-          setStatus("Cannot read this page", "error");
-          return;
+          setStatus("Cannot read this page", "error"); return;
         }
         const { title, text } = response;
         const blob     = new Blob([text], { type: "text/plain" });
-        const filename = (title || "webpage").replace(/[^a-z0-9]/gi, "_").slice(0, 40) + ".txt";
+        const fname    = (title || "webpage").replace(/[^a-z0-9]/gi, "_").slice(0, 40) + ".txt";
         const formData = new FormData();
-        formData.append("file", blob, filename);
-        setStatus("Uploading to FlashFetch…");
+        formData.append("file", blob, fname);
+        setStatus("Uploading…");
         try {
           const headers = {};
           if (data.ff_token) headers["Authorization"] = `Bearer ${data.ff_token}`;
           const res = await fetch(`${apiUrl}/upload`, { method: "POST", headers, body: formData });
           if (!res.ok) throw new Error(`Upload failed ${res.status}`);
-          setStatus(`Saved: ${filename}`, "success");
+          setStatus(`Saved: ${fname}`, "success");
           setTimeout(() => hideStatus(), 3000);
         } catch (err) {
           setStatus(`Upload error: ${err.message}`, "error");

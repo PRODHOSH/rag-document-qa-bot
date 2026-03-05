@@ -28,6 +28,7 @@
   ],
   "permissions": [
     "activeTab",
+    "tabs",
     "storage",
     "contextMenus",
     "scripting",
