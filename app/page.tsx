@@ -303,52 +303,16 @@ export default function Home() {
             </p>
           </FadeIn>
 
-          {/* BENTO GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-auto">
+          {/* NUMBERED FEATURE GRID — 3 × 2 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-            {/* ① VOICE INPUT — wide */}
-            <FadeIn delay={0} direction="up" className="lg:col-span-2">
+            {/* 1 — MULTILINGUAL */}
+            <FadeIn delay={0} direction="up">
               <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                {/* mic demo */}
-                <div className="flex items-center gap-4">
-                  <div className="relative flex-shrink-0">
-                    <div className="h-14 w-14 rounded-2xl bg-white/6 border border-white/10 flex items-center justify-center">
-                      <svg className="h-7 w-7 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                        <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/>
-                      </svg>
-                    </div>
-                    <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-white/80 border-2 border-[#0a0a0a] animate-pulse" />
-                  </div>
-                  {/* waveform bars */}
-                  <div className="flex items-center gap-1 h-10">
-                    {[3,6,9,5,8,4,7,10,6,4,8,5,9,3,7].map((h, i) => (
-                      <div key={i} className="w-1 rounded-full bg-white/25" style={{ height: `${h * 3}px` }} />
-                    ))}
-                  </div>
-                  <div className="ml-auto rounded-xl border border-white/10 bg-white/5 px-3 py-1.5">
-                    <p className="text-[11px] text-white/50 font-mono">Listening…</p>
-                  </div>
-                </div>
-                {/* pill input */}
-                <div className="rounded-xl border border-white/8 bg-white/4 px-4 py-2.5 flex items-center gap-2">
-                  <p className="text-sm text-white/45 flex-1 font-mono italic">&ldquo;Summarise the key findings from chapter 3&rdquo;</p>
-                  <div className="h-6 w-6 rounded-lg bg-white flex items-center justify-center shrink-0">
-                    <svg className="h-3 w-3 text-black" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 8h8M8 4l4 4-4 4"/></svg>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">Voice Input</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">Click the mic, speak your question — it auto-fills the input. Powered by the browser&apos;s Web Speech API, zero backend needed.</p>
-                </div>
-              </div>
-            </FadeIn>
-
-            {/* ② MULTILINGUAL */}
-            <FadeIn delay={70} direction="up">
-              <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                {/* language chips */}
+                {/* number */}
+                <span className="text-[11px] font-bold text-white/20 tracking-widest font-mono">01</span>
+                {/* demo */}
                 <div className="flex flex-wrap gap-2">
                   {[
                     { lang: "English", flag: "🇺🇸", active: true  },
@@ -358,23 +322,95 @@ export default function Home() {
                     { lang: "French",  flag: "🇫🇷", active: false },
                     { lang: "Arabic",  flag: "🇸🇦", active: false },
                   ].map((l) => (
-                    <span key={l.lang} className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${l.active ? "border-white/25 bg-white/10 text-white" : "border-white/8 bg-white/3 text-white/35"}`}>
+                    <span key={l.lang} className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${l.active ? "border-white/25 bg-white/10 text-white" : "border-white/8 bg-white/3 text-white/35"}`}>
                       {l.flag} {l.lang}
                     </span>
                   ))}
                 </div>
-                <div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">Multilingual</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">Ask in Tamil, Hindi, Telugu, French — FlashFetch auto-detects your language and replies in kind. No config, no flags.</p>
+                <div className="mt-auto">
+                  <h3 className="text-sm font-semibold text-white mb-1.5">Multilingual Support</h3>
+                  <p className="text-xs text-white/40 leading-relaxed">Ask in Tamil, Hindi, Telugu, French — FlashFetch auto-detects your language and replies in kind. No config, no flags.</p>
                 </div>
               </div>
             </FadeIn>
 
-            {/* ③ CONFIDENCE SCORING */}
-            <FadeIn delay={140} direction="up">
+            {/* 2 — VOICE INPUT */}
+            <FadeIn delay={60} direction="up">
               <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                {/* progress bars */}
+                <span className="text-[11px] font-bold text-white/20 tracking-widest font-mono">02</span>
+                {/* demo */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="relative shrink-0">
+                      <div className="h-11 w-11 rounded-xl bg-white/6 border border-white/10 flex items-center justify-center">
+                        <svg className="h-5 w-5 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                          <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/>
+                        </svg>
+                      </div>
+                      <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-white/80 border-2 border-[#0a0a0a] animate-pulse" />
+                    </div>
+                    <div className="flex items-center gap-0.5 h-8 flex-1">
+                      {[3,6,9,5,8,4,7,10,6,4,8,5,9,3,7].map((h, i) => (
+                        <div key={i} className="flex-1 rounded-full bg-white/20" style={{ height: `${h * 2.5}px` }} />
+                      ))}
+                    </div>
+                    <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 shrink-0">
+                      <p className="text-[10px] text-white/50 font-mono">Listening…</p>
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-white/8 bg-white/4 px-3 py-2 flex items-center gap-2">
+                    <p className="text-[11px] text-white/40 flex-1 font-mono italic">&ldquo;Summarise chapter 3 findings&rdquo;</p>
+                    <div className="h-5 w-5 rounded-md bg-white flex items-center justify-center shrink-0">
+                      <svg className="h-2.5 w-2.5 text-black" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 8h8M8 4l4 4-4 4"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-auto">
+                  <h3 className="text-sm font-semibold text-white mb-1.5">Voice / Audio Input</h3>
+                  <p className="text-xs text-white/40 leading-relaxed">Click mic, speak — it auto-fills the input. Powered by the browser&apos;s Web Speech API, zero backend needed.</p>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* 3 — SHAREABLE LINKS */}
+            <FadeIn delay={120} direction="up">
+              <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+                <span className="text-[11px] font-bold text-white/20 tracking-widest font-mono">03</span>
+                {/* demo */}
+                <div className="flex flex-col gap-2">
+                  <div className="rounded-lg border border-white/8 bg-white/4 px-3 py-2.5 flex items-center gap-2">
+                    <svg className="h-3 w-3 text-white/35 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 9a3 3 0 005.12 2.12l2-2a3 3 0 00-4.24-4.24l-1.12 1.12"/><path d="M10 7a3 3 0 00-5.12-2.12l-2 2a3 3 0 004.24 4.24l1.12-1.12"/></svg>
+                    <span className="text-[10px] text-white/35 font-mono">flashfetch.app/share/</span>
+                    <span className="text-[10px] text-white/70 font-mono font-bold">a8f3k2</span>
+                  </div>
+                  <div className="rounded-lg border border-white/6 bg-white/2 p-2.5 flex items-center gap-2">
+                    <div className="h-4 w-4 rounded bg-white flex items-center justify-center shrink-0"><span className="text-black text-[6px] font-black">FF</span></div>
+                    <span className="text-[10px] text-white/40">FlashFetch · Shared Session</span>
+                    <span className="ml-auto text-[9px] text-white/60 bg-white/8 border border-white/10 rounded-full px-1.5 py-0.5">Public</span>
+                  </div>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {["Public read-only", "One-click revoke"].map((t) => (
+                      <span key={t} className="inline-flex items-center gap-1 rounded-full border border-white/8 bg-white/3 px-2 py-0.5 text-[10px] text-white/40">
+                        <span className="h-1 w-1 rounded-full bg-white/30" />{t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-auto">
+                  <h3 className="text-sm font-semibold text-white mb-1.5">Shared Links</h3>
+                  <p className="text-xs text-white/40 leading-relaxed">Share any conversation as a public read-only link. No account needed to view — like Perplexity shared threads.</p>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* 4 — CONFIDENCE SCORING */}
+            <FadeIn delay={180} direction="up">
+              <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+                <span className="text-[11px] font-bold text-white/20 tracking-widest font-mono">04</span>
+                {/* demo */}
                 <div className="flex flex-col gap-3">
                   {[
                     { label: "High confidence",   pct: "97%", w: "w-[97%]", opacity: "bg-white/80" },
@@ -392,18 +428,19 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">Confidence Scoring</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">Every answer carries a semantic similarity score. Know at a glance how certain the retrieval was — High, Medium, or Low.</p>
+                <div className="mt-auto">
+                  <h3 className="text-sm font-semibold text-white mb-1.5">Confidence-Based Answers</h3>
+                  <p className="text-xs text-white/40 leading-relaxed">Every answer carries a semantic similarity score — High, Medium, or Low. Know exactly how certain the retrieval was.</p>
                 </div>
               </div>
             </FadeIn>
 
-            {/* ④ CITATIONS */}
-            <FadeIn delay={210} direction="up">
+            {/* 5 — SOURCE CITATIONS */}
+            <FadeIn delay={240} direction="up">
               <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                {/* citation card */}
+                <span className="text-[11px] font-bold text-white/20 tracking-widest font-mono">05</span>
+                {/* demo */}
                 <div className="rounded-xl border border-white/8 bg-white/3 p-3 flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
@@ -414,18 +451,19 @@ export default function Home() {
                   </div>
                   <p className="text-[11px] text-white/30 font-mono italic leading-snug border-l-2 border-white/10 pl-2">&ldquo;…eligible for a full refund within 7 business days…&rdquo;</p>
                 </div>
-                <div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">Source Citations</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">Every answer shows which document it came from, the exact passage used, and a confidence score. Full transparency.</p>
+                <div className="mt-auto">
+                  <h3 className="text-sm font-semibold text-white mb-1.5">Source Citations</h3>
+                  <p className="text-xs text-white/40 leading-relaxed">Every answer shows which document it came from, the exact passage used, and a confidence score. Full transparency.</p>
                 </div>
               </div>
             </FadeIn>
 
-            {/* ⑤ HISTORY SEARCH */}
-            <FadeIn delay={280} direction="up">
+            {/* 6 — CHAT HISTORY SEARCH */}
+            <FadeIn delay={300} direction="up">
               <div className="relative h-full rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 flex flex-col gap-5 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                {/* search demo */}
+                <span className="text-[11px] font-bold text-white/20 tracking-widest font-mono">06</span>
+                {/* demo */}
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
                     <svg className="h-3 w-3 text-white/30 shrink-0" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.5"/><path d="M10 10l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
@@ -439,49 +477,9 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">Chat History Search</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">Search across every question you&apos;ve ever asked. Jump straight to any past session match — no scrolling required.</p>
-                </div>
-              </div>
-            </FadeIn>
-
-            {/* ⑥ SHARED LINKS — full width */}
-            <FadeIn delay={350} direction="up" className="sm:col-span-2 lg:col-span-3">
-              <div className="relative rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden p-6 group hover:border-white/16 hover:bg-white/[0.02] transition-all duration-300">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                <div className="absolute right-0 top-0 h-full w-64 bg-gradient-to-l from-white/[0.02] to-transparent pointer-events-none" />
-                <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                  {/* left */}
-                  <div className="flex-1">
-                    <h3 className="text-base font-semibold text-white mb-2">Shareable Chat Sessions</h3>
-                    <p className="text-sm text-white/40 leading-relaxed max-w-lg">
-                      Generate a public read-only link to any conversation. Share a live demo with teammates or your audience — no account needed to view. One click to share, one click to revoke.
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {["Public read-only", "One-click revoke", "No login to view", "Shareable instantly"].map((tag) => (
-                        <span key={tag} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/4 px-3 py-1 text-[11px] text-white/50">
-                          <span className="h-1 w-1 rounded-full bg-white/40" /> {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  {/* right: URL demo */}
-                  <div className="flex flex-col gap-2 shrink-0 w-full sm:w-72">
-                    <div className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 flex items-center gap-2">
-                      <svg className="h-3.5 w-3.5 text-white/35 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 9a3 3 0 005.12 2.12l2-2a3 3 0 00-4.24-4.24l-1.12 1.12"/><path d="M10 7a3 3 0 00-5.12-2.12l-2 2a3 3 0 004.24 4.24l1.12-1.12"/></svg>
-                      <span className="text-[11px] text-white/35 font-mono truncate">flashfetch.app/share/</span>
-                      <span className="text-[11px] text-white/70 font-mono font-semibold">a8f3k2</span>
-                    </div>
-                    <div className="rounded-xl border border-white/6 bg-white/2 p-3 flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 rounded bg-white flex items-center justify-center shrink-0"><span className="text-black text-[6px] font-black">FF</span></div>
-                        <span className="text-[10px] text-white/40">FlashFetch · Shared Session</span>
-                        <span className="ml-auto text-[9px] text-white/60 bg-white/8 border border-white/10 rounded-full px-2 py-0.5">Public</span>
-                      </div>
-                      <p className="text-[11px] text-white/25 italic pl-6">Read-only · No login required</p>
-                    </div>
-                  </div>
+                <div className="mt-auto">
+                  <h3 className="text-sm font-semibold text-white mb-1.5">Chat History Search</h3>
+                  <p className="text-xs text-white/40 leading-relaxed">Search across every question you&apos;ve ever asked. Jump straight to any past session match — no scrolling required.</p>
                 </div>
               </div>
             </FadeIn>
