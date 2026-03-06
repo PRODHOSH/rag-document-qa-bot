@@ -189,11 +189,12 @@ GROQ_API_KEY=gsk_...
 <div align="center">
 
 <pre>
- /|\        /|\        /|\        /|\
-/ \        / \        / \        / \
+   O           O           O           O
+  /|\         /|\         /|\         /|\
+  / \         / \         / \         / \
 
-PRODHOSH VS   S.SHARAN   ASHISH REDDY   NAWAZ
- Developer     Content     Research      Design
+PRODHOSH VS    S.SHARAN   ASHISH REDDY   NAWAZ
+ Developer      Content     Research      Design
 </pre>
 
 | Name | Role |
