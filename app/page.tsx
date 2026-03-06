@@ -6,112 +6,164 @@ import { UpgradeButton } from "@/components/ui/upgrade-button";
 function ProductMock() {
   return (
     <div className="w-full max-w-4xl mx-auto relative">
-      {/* glow behind the window */}
+      {/* glow */}
       <div
         className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
         style={{
-          top: "-30%",
-          width: "85%",
-          height: "100%",
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.07) 0%, transparent 70%)",
+          top: "-30%", width: "85%", height: "100%",
+          background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.07) 0%, transparent 70%)",
           filter: "blur(40px)",
         }}
         aria-hidden
       />
 
-      {/* window frame */}
+      {/* browser chrome */}
       <div className="relative z-10 rounded-xl border border-white/10 bg-[#0a0a0a] shadow-2xl overflow-hidden">
-        {/* title bar */}
-        <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/8 bg-[#111]">
+        {/* macOS-style title bar */}
+        <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-white/8 bg-[#111]">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-          <span className="ml-3 text-xs text-white/30 font-mono">FlashFetch — Document Intelligence</span>
+          <div className="ml-3 flex items-center gap-1.5 rounded bg-white/6 border border-white/8 px-2 py-0.5">
+            <svg className="h-2.5 w-2.5 text-white/25" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.3"/><path d="M5 8h6M8 5v6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+            <span className="text-[10px] text-white/30 font-mono">localhost:3000/chat</span>
+          </div>
         </div>
 
-        {/* body: two cols */}
-        <div className="flex min-h-72 md:min-h-80">
-          {/* sidebar: docs list */}
-          <div className="hidden sm:flex w-48 flex-col border-r border-white/8 bg-[#0d0d0d] p-3 gap-1">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-white/30 px-2 mb-2">Documents</p>
-            {[
-              { name: "refund_policy.pdf", active: true },
-              { name: "faq.md", active: false },
-              { name: "user_manual.txt", active: false },
-            ].map((doc) => (
-              <div
-                key={doc.name}
-                className={`flex items-center gap-2 rounded-md px-2 py-1.5 cursor-default ${doc.active ? "bg-white/8 text-white" : "text-white/40"}`}
-              >
-                <svg className="h-3 w-3 shrink-0" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M4 0h6l4 4v10a2 2 0 01-2 2H4a2 2 0 01-2-2V2a2 2 0 012-2z"/>
-                  <path fill="none" stroke="currentColor" strokeWidth="1.5" d="M10 0v4h4"/>
-                </svg>
-                <span className="text-[11px] truncate font-mono">{doc.name}</span>
+        {/* app body */}
+        <div className="flex" style={{ minHeight: 340 }}>
+
+          {/* ── SIDEBAR ── */}
+          <div className="hidden sm:flex w-52 flex-col border-r border-white/8 bg-[#0d0d0d]">
+            {/* FILES / HISTORY tabs */}
+            <div className="flex border-b border-white/8">
+              {[
+                { label: "FILES",   icon: "M4 2h8v1H4zM2 4h12v10H2z", active: true  },
+                { label: "HISTORY", icon: "M8 3a5 5 0 100 10A5 5 0 008 3zM8 6v3l2 1", active: false },
+              ].map((tab) => (
+                <button key={tab.label} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] font-bold tracking-[0.12em] transition-colors ${tab.active ? "text-white border-b-2 border-white -mb-px" : "text-white/30"}`}>
+                  <svg className="h-2.5 w-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><path d={tab.icon}/></svg>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* documents header */}
+            <div className="flex items-center justify-between px-3 pt-3 pb-1.5">
+              <span className="text-[9px] font-semibold uppercase tracking-widest text-white/30">Documents</span>
+              <div className="h-4 w-4 rounded flex items-center justify-center bg-white/6 border border-white/10">
+                <svg className="h-2.5 w-2.5 text-white/40" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M8 3v10M3 8h10" strokeLinecap="round"/></svg>
               </div>
-            ))}
-            <div className="mt-auto pt-3 border-t border-white/8">
-              <div className="flex items-center gap-1.5 px-2">
+            </div>
+
+            {/* file rows */}
+            <div className="flex flex-col gap-0.5 px-2 pb-2">
+              {[
+                { name: "prodhosh_new_resu…", size: "119.4 KB", icon: "person" },
+                { name: "simulation_code.pdf", size: "4314.7 KB", icon: "pdf"    },
+                { name: "faq_docs.pdf",        size: "87.2 KB",   icon: "pdf"    },
+              ].map((f, i) => (
+                <div key={f.name} className={`flex items-center gap-2 rounded-md px-2 py-1.5 ${i === 0 ? "bg-white/6" : ""}`}>
+                  <div className="h-6 w-6 rounded bg-white/8 border border-white/10 flex items-center justify-center shrink-0">
+                    <svg className="h-3 w-3 text-white/40" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3"><path d="M4 1h6l3 3v10H3V1z"/><path d="M10 1v3h3"/></svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] text-white/70 truncate leading-tight">{f.name}</p>
+                    <p className="text-[9px] text-white/25 leading-tight">{f.size}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* add more files */}
+            <div className="px-3 pb-3">
+              <div className="flex items-center gap-1.5 text-white/30 cursor-default">
+                <svg className="h-2.5 w-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 13l3-3 2 2 4-5 3 2" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 15h14" strokeLinecap="round"/></svg>
+                <span className="text-[10px]">Add more files</span>
+              </div>
+            </div>
+
+            {/* indexed status */}
+            <div className="mt-auto border-t border-white/8 px-3 py-2.5">
+              <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-[10px] text-white/30">3 docs indexed</span>
+                <span className="text-[10px] text-white/30">2 docs indexed</span>
               </div>
             </div>
           </div>
 
-          {/* chat panel */}
-          <div className="flex-1 flex flex-col bg-[#080808] p-4 gap-3">
-            {/* user message */}
-            <div className="flex justify-end">
-              <div className="rounded-lg rounded-br-none bg-white/10 border border-white/8 px-3 py-2 max-w-xs">
-                <p className="text-[12px] text-white/80">What is the refund policy for orders above ₹2,000?</p>
+          {/* ── CHAT PANEL ── */}
+          <div className="flex-1 flex flex-col bg-[#080808]">
+            {/* chat header */}
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/8 bg-[#0d0d0d]">
+              <div className="h-6 w-6 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                <svg className="h-3 w-3 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <span className="text-[13px] font-semibold text-white/80 flex-1">AI Chat</span>
+              <div className="flex items-center gap-1.5 rounded-md border border-white/10 px-2 py-1 text-[10px] text-white/40 gap-1">
+                <svg className="h-2.5 w-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 8h12M8 2l6 6-6 6" strokeLinecap="round"/></svg>
+                New Chat
+              </div>
+              <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/6 pl-1 pr-2 py-0.5">
+                <div className="h-4 w-4 rounded-full bg-white/20 flex items-center justify-center">
+                  <span className="text-[7px] font-bold text-white/60">P</span>
+                </div>
+                <span className="text-[10px] text-white/50">prodhosh2</span>
+                <svg className="h-2 w-2 text-white/30" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6l4 4 4-4"/></svg>
               </div>
             </div>
 
-            {/* bot response */}
-            <div className="flex flex-col gap-2 max-w-sm md:max-w-lg">
-              <div className="rounded-lg rounded-bl-none border border-white/8 bg-[#111] px-3 py-2.5">
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  <div className="h-4 w-4 rounded bg-white flex items-center justify-center">
-                    <span className="text-black text-[7px] font-black">FF</span>
-                  </div>
-                  <span className="text-[10px] text-white/40 font-semibold">FlashFetch</span>
+            {/* messages */}
+            <div className="flex-1 flex flex-col gap-3 p-4 overflow-hidden">
+              {/* user bubble */}
+              <div className="flex justify-end">
+                <div className="rounded-xl rounded-br-none bg-white text-black px-3 py-2 max-w-[58%]">
+                  <p className="text-[11px] font-medium leading-snug">Summarize my resume for a software engineering role</p>
                 </div>
-                <p className="text-[12px] text-white/80 leading-relaxed">
-                  Orders above ₹2,000 are eligible for a full refund within 7 business days of delivery, provided the item is unused and in its original packaging.
-                </p>
+              </div>
 
-                {/* sources */}
-                <div className="mt-2.5 pt-2.5 border-t border-white/8">
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-white/25 mb-1.5">Sources</p>
-                  <div className="rounded-md bg-white/4 border border-white/6 p-2 flex flex-col gap-1">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-mono text-white/50">refund_policy.pdf</span>
-                      </div>
-                      <span className="text-[9px] font-semibold text-green-400 bg-green-400/10 rounded px-1.5 py-0.5">
-                        High
-                      </span>
+              {/* bot bubble */}
+              <div className="flex flex-col gap-2 max-w-[85%]">
+                <div className="rounded-xl rounded-bl-none border border-white/8 bg-[#111] px-3 py-2.5">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <div className="h-4 w-4 rounded bg-white flex items-center justify-center shrink-0">
+                      <span className="text-black text-[7px] font-black">FF</span>
                     </div>
-                    <p className="text-[11px] text-white/35 font-mono italic leading-snug">
-                      "...eligible for a full refund within 7 business days..."
-                    </p>
+                    <span className="text-[10px] text-white/40 font-semibold">FlashFetch</span>
+                    <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[8px] font-semibold text-emerald-400">
+                      <span className="h-1 w-1 rounded-full bg-emerald-400" /> High confidence
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-white/75 leading-relaxed">
+                    Prodhosh is a full-stack developer with experience in React, Next.js, Python, and FastAPI. His resume highlights RAG pipelines, AI integrations, and hackathon projects including FlashFetch.
+                  </p>
+                  {/* source chip */}
+                  <div className="mt-2 pt-2 border-t border-white/8 flex items-center justify-between">
+                    <span className="text-[9px] font-mono text-white/35">prodhosh_new_resu…</span>
+                    <span className="text-[8px] font-semibold text-emerald-400 bg-emerald-400/10 rounded px-1.5 py-0.5">94%</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* input bar */}
-            <div className="mt-auto flex items-center gap-2 rounded-lg border border-white/8 bg-[#111] px-3 py-2">
-              <p className="text-[12px] text-white/20 flex-1">Ask a question about your documents...</p>
-              <div
-                className="h-6 w-6 rounded-md flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(to bottom, #fff, rgba(255,255,255,0.7))" }}
-              >
-                <svg className="h-3 w-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
+            <div className="px-4 pb-3">
+              <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#111] px-3 py-2.5">
+                <p className="text-[11px] text-white/20 flex-1">Ask a question about your documents…</p>
+                {/* mic */}
+                <div className="h-6 w-6 rounded-lg border border-white/10 flex items-center justify-center shrink-0">
+                  <svg className="h-3 w-3 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4M8 22h8"/>
+                  </svg>
+                </div>
+                {/* send */}
+                <div className="h-6 w-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(to bottom, #fff, rgba(255,255,255,0.7))" }}>
+                  <svg className="h-3 w-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </div>
               </div>
+              <p className="text-center text-[9px] text-white/15 mt-1.5">Multi-turn memory · Grounded answers · Enter to send</p>
             </div>
           </div>
         </div>
@@ -215,10 +267,10 @@ export default function Home() {
       <section className="border-y border-white/8 bg-white/2">
         <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { value: "< 500ms", label: "Avg. retrieval time" },
-            { value: "Zero",    label: "Hallucinations guaranteed" },
+            { value: "< 500ms",   label: "Avg. retrieval time" },
+            { value: "Zero",      label: "Hallucinations guaranteed" },
             { value: "3 formats", label: "PDF · TXT · Markdown" },
-            { value: "100%",    label: "Citations included" },
+            { value: "5+ langs",  label: "Tamil, Hindi, Telugu…" },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <p className="text-xl sm:text-2xl font-bold text-white">{s.value}</p>
@@ -247,7 +299,7 @@ export default function Home() {
             </h2>
           </FadeIn>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 icon: "⚡",
