@@ -46,7 +46,7 @@ def chunk_text(text: str, filename: str) -> list[dict]:
 
     for i in range(0, len(words), step):
         chunk_words = words[i : i + CHUNK_SIZE]
-        if len(chunk_words) < 20:          # skip tiny trailing fragments
+        if len(chunk_words) < 5:           # skip only truly tiny trailing fragments
             continue
         chunks.append({
             "text":   " ".join(chunk_words),
@@ -81,6 +81,10 @@ def ingest():
         print(f"    → {len(chunks)} chunks")
 
     print(f"\nTotal chunks: {len(all_chunks)}")
+
+    if not all_chunks:
+        print("No chunks generated — all files may be empty or too short. Skipping index build.")
+        return
 
     # ── 2. Generate embeddings ─────────────────────────────
     print(f"\nLoading embedding model: {MODEL_NAME} ...")
