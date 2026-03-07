@@ -45,8 +45,8 @@ next-env.d.ts
 __pycache__/
 *.pyc
 
-# RAG backend generated index (rebuilt on deploy)
-rag-backend/index/
+# RAG backend FAISS index — auto-rebuilt on startup from committed docs
+# rag-backend/index/   ← intentionally NOT ignored so index is committed
 
 
 

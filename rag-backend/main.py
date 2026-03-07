@@ -72,6 +72,33 @@ class AnswerResponse(BaseModel):
     confidence: str           # "high" | "medium" | "low"
 
 
+# ── Startup: auto-index committed docs ───────────────────
+@app.on_event("startup")
+async def auto_ingest_on_startup():
+    """
+    On every cold start (Render free tier, local dev, etc.):
+    If docs exist but the FAISS index is missing, rebuild it automatically.
+    This ensures the demo docs committed to the repo are always indexed.
+    """
+    index_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index", "faiss.index")
+    docs_exist = any(
+        f.endswith((".txt", ".md", ".pdf"))
+        for f in os.listdir(DOCS_DIR)
+    ) if os.path.isdir(DOCS_DIR) else False
+
+    if docs_exist and not os.path.exists(index_path):
+        print("[startup] FAISS index missing — auto-building from docs...")
+        try:
+            run_ingest()
+            print("[startup] Index built successfully.")
+        except Exception as e:
+            print(f"[startup] WARNING: auto-ingest failed: {e}")
+    elif os.path.exists(index_path):
+        print("[startup] FAISS index found — skipping rebuild.")
+    else:
+        print("[startup] No docs found — upload a file to begin.")
+
+
 # ── Routes ────────────────────────────────────────────────
 @app.post("/ask", response_model=AnswerResponse)
 def ask(query: Query):
