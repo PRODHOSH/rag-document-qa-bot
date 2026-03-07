@@ -1,5 +1,7 @@
 ﻿// Constants
-const DEFAULT_API = "http://localhost:8000";
+// In production: update this to your Render backend URL
+// e.g. "https://flashfetch-backend.onrender.com"
+const DEFAULT_API  = "http://localhost:8000";
 const OLD_RAILWAY  = "https://rag-document-qa-bot-production.up.railway.app";
 
 // State
