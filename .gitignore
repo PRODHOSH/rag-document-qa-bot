@@ -94,10 +94,6 @@ __pycache__/
 
 # rag-backend/index/   ← intentionally NOT ignored so index is committed
 
-
-
-
-
-
-
-config.bat
+# env files
+.env*
+!.env.example
